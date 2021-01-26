@@ -20,7 +20,7 @@ apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'maven'
 
-version='1.0.0'
+version='1.0.1'
 group='org.joliver82'
 
 ext.jmeVersion = "3.3+"
@@ -28,7 +28,7 @@ ext.jmeVersion = "3.3+"
 // Version meta-data
 ext {
     releaseDescription = "jme3-wireframe ${project.version}"
-    releaseVcsTag = "${project.name}-v${project.version}"
+    releaseVcsTag = "${project.version}"
 }
 
 // Project-wide meta-data
@@ -53,6 +53,7 @@ repositories {
 
 sourceCompatibility = 1.7
 compileJava {
+    options.release = 7
     options.encoding = 'UTF-8'
     options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
 }
@@ -100,10 +101,9 @@ artifacts {
 
 
 // Put this at the end or it won't pick up the project.version and stuff
-/*
 if( project.hasProperty('releaseUser') ) {
     apply plugin: 'com.jfrog.bintray'
-    apply from: 'https://raw.githubusercontent.com/Simsilica/gradle-plugins/master/simtools-release.gradle'
+    apply from: 'release.gradle'
 }
-*/
+
 

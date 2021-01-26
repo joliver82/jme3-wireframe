@@ -1,0 +1,98 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
+    }
+}
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'maven-publish'
+
+def pomConfig = {
+
+  url project.websiteUrl  
+  inceptionYear '2021'
+
+  scm {
+    url project.vcsUrl  
+  }
+
+  licenses {
+    license {
+      name 'New BSD (3-clause) License'
+      url 'http://opensource.org/licenses/BSD-3-Clause'
+      distribution 'repo'
+    }
+  }
+
+  developers {
+    developer {
+      name 'Jesus Oliver'
+      id 'joliver82'
+    }
+  }
+}
+
+publishing {
+    publications {
+        MavenRelease(MavenPublication) {
+            from components.java
+            groupId project.group  
+            artifactId project.name 
+            version project.version
+            
+            artifact sourcesJar
+            artifact javadocJar
+            
+            pom.withXml {
+                asNode().children().last() + pomConfig
+            }            
+        }
+    }
+}
+
+bintray {
+
+    println "Bintray project:" + project.name
+
+    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+	key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+    
+    publications = ['MavenRelease']
+
+    dryRun = false
+    publish = (project.hasProperty('bintrayPublish') ? (project.property('bintrayPublish') == "true") : false)
+ 
+    println "Publish?:" + publish + "  bintrayPublish set?:" + project.hasProperty('bintrayPublish')
+    if( project.hasProperty('bintrayPublish') ) {
+        println "  bintrayPublish set to:" + project.property('bintrayPublish')
+    }  
+    
+    pkg {
+        repo = 'org.joliver82'
+        name = project.name 
+        userOrg = 'joliver82'
+        licenses = ['BSD 3-Clause']
+        websiteUrl = project.websiteUrl 
+        vcsUrl = project.vcsUrl 
+        githubRepo = project.githubRepo 
+        githubReleaseNotesFile = 'release-notes.md'
+        issueTrackerUrl = project.issueTrackerUrl 
+        labels = project.bintrayLabels 
+        publicDownloadNumbers = true
+
+        version {
+            println "Using version info:"
+            println "    version name: ${project.version}"        
+            println "    version desc: ${project.releaseDescription}"        
+            println "    version vcstag: ${project.releaseVcsTag}"        
+            name = project.version
+            desc = project.releaseDescription 
+            released = new Date()
+            vcsTag = project.releaseVcsTag 
+        } 
+    }
+}
+
+

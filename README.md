@@ -57,7 +57,7 @@ Mesh newMesh = BarycentricCoordGenerator.setBarycentricCoords(currentMesh);
 ```
 Add the new mesh to the desired spatial instead and set it to use "MatDefs/BarycentricWireframe.j3md" material. Same as default wireframe material you can set the desired color
 
-Please note that this creates a normal buffer having the barycentric coordinates so any other inner jme3 functionality requiring or modifying them could fail
+Please note that this expands the mesh removing indexing and creates a normal buffer having the barycentric coordinates so some inner jme3 functionalities (like animation, skinning or any other) could fail. 
 
 ### Sample app
 

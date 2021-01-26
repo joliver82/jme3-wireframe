@@ -57,6 +57,8 @@ Mesh newMesh = BarycentricCoordGenerator.setBarycentricCoords(currentMesh);
 ```
 Add the new mesh to the desired spatial instead and set it to use "MatDefs/BarycentricWireframe.j3md" material. Same as default wireframe material you can set the desired color
 
+Please note that this creates a normal buffer having the barycentric coordinates so any other inner jme3 functionality requiring or modifying them could fail
+
 ### Sample app
 
 There's a sample app at https://github.com/joliver82/jME3-GLES-wireframe showing four spheres from left to right, top to bottom: jME3 default wireframe mode (will render solid on android), Barycentric coordinates approach mimicing jME3's default, Geometry shader approach and Barycentric coordinates approach mimicing geometry shader approach.

@@ -7,8 +7,9 @@ This is an java library for jme3 implementing two different wireframe rendering 
 * Geometry shader implementation: Using this method requires openGLES >= 3.2 and Android API level 24 (Android 7) or newer. For openGL you need any card supporting geometry shaders.
 * Barycentric coordinates implementation: This method is available to any openGLES version without API level limitation.
 
+## Implementation details
 
-## Geometry shader implementation details
+### Geometry shader implementation details
 
 The implementation is based on the simplest method from https://github.com/martin-pr/possumwood/wiki/Wireframe-using-a-Geometry-Shader which just changes the triangles to line strips so the fragment shader outputs lines instead
 
@@ -19,7 +20,7 @@ Geometry shader: As said, just changes the triangles into line strips.
 Fragment shader: Paints the requested color. You can set Color and/or VertexColor same way you would do when using jme3's Unshaded material
 
 
-## Barycentric coordinates implementation details
+### Barycentric coordinates implementation details
 
 The mesh is expanded so you have the full list of triangles without any indexing. Then the bary coords are set as follows: v1(1,0,0), v2(0,1,0), v3(0,0,1) for each triangle. This data is stored in the normal buffer because it matches our type and size requirements and we don't need normals as we're rendering wireframe. This could cause bad behaviour with inner jme stuff like skinning (has not been tested)
 
@@ -39,8 +40,24 @@ Not sure I'll spend more time or not into this, but...
 
 ## Usage
 
-* Download latest release and add it as library to your jme3 project
-* If using gradle, just add "org.joliver82.jme3-wireframe:$version" to your dependencies
+Include it in your project either:
+
+* Download latest release and add it as library to your jme3 project in the IDE you're using
+* If using gradle, just add implementation 'org.joliver82:jme3-wireframe:1.0.1' to your dependencies
+
+### Geometry approach
+
+This is the default and easier to include, just set your spatial to use the wireframe material (MatDefs/Wireframe.j3md) and set the desired color as you would do for Unshaded.j3md
+
+### Barycentric coordinate
+
+You need to make your mesh store the barycentric coordinates by running 
+```
+Mesh newMesh = BarycentricCoordGenerator.setBarycentricCoords(currentMesh);
+```
+Add the new mesh to the desired spatial instead and set it to use "MatDefs/BarycentricWireframe.j3md" material. Same as default wireframe material you can set the desired color
+
+### Sample app
 
 There's a sample app at https://github.com/joliver82/jME3-GLES-wireframe showing four spheres from left to right, top to bottom: jME3 default wireframe mode (will render solid on android), Barycentric coordinates approach mimicing jME3's default, Geometry shader approach and Barycentric coordinates approach mimicing geometry shader approach.
 

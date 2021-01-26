@@ -1,13 +1,11 @@
-# jME GLES Wireframe render
+# jME3 Wireframe render library
 
 ## About
 
-This is an android jme3 project showing two different wireframe rendering methods GLES:
+This is an java library for jme3 implementing two different wireframe rendering methods for GLES although it works on desktop GL:
 
-* Geometry shader implementation: Using this method requires openGLES >= 3.2 and Android API level 24 (Android 7) or newer.
+* Geometry shader implementation: Using this method requires openGLES >= 3.2 and Android API level 24 (Android 7) or newer. For openGL you need any card supporting geometry shaders.
 * Barycentric coordinates implementation: This method is available to any openGLES version without API level limitation.
-
-The app requires API level 24 (Android 7) or newer, this could be lowered if removing the code making use of Wireframe.j3md
 
 
 ## Geometry shader implementation details
@@ -36,15 +34,15 @@ Improved rendering to use "newer" GLSL capabilities (fwidth) so wireframe lines 
 Not sure I'll spend more time or not into this, but...
 
 * Implement any of the other techniques from @martin-pr's tutorial for better looking and/or more configurability.
-* Implement non geometry shader wireframe rendering based on barycentric coordinates. This will imply CPU code and duplicating vertex information in memory but will support openGL ES <3.2. --> Done
-* Include this info jme3 core.
+* Implement a Mesh subclass adding a new buffer type to avoid messing with the normal buffer.
 
 
 ## Usage
 
-Just load the project with latest Android Studio (Tested using 4.1.2) and run 
+* Download latest release and add it as library to your jme3 project
+* If using gradle, just add "org.joliver82.jme3-wireframe:$version" to your dependencies
 
-The sample app shows four spheres from left to right, top to bottom: jME3 default wireframe mode (will render solid on android), Barycentric coordinates approach mimicing jME3's default, Geometry shader approach and Barycentric coordinates approach mimicing geometry shader approach.
+There's a sample app at https://github.com/joliver82/jME3-GLES-wireframe showing four spheres from left to right, top to bottom: jME3 default wireframe mode (will render solid on android), Barycentric coordinates approach mimicing jME3's default, Geometry shader approach and Barycentric coordinates approach mimicing geometry shader approach.
 
 Desktop screenshot:
 ![Alt text](/screenshots/wireframe-desktop.png?raw=true "Desktop screenshot")
@@ -55,7 +53,6 @@ Android screenshot:
 
 ## References
 
-* This simple project used the jme3 template from https://github.com/noncom/jme-android-example but updated to current Android Studio and SDK. Feel free to use this as base template for your jME3 android projects
 * Designed for jMonkeyEngine 3 https://github.com/jMonkeyEngine/jmonkeyengine/
 * Using Heart library from stephengold https://github.com/stephengold/Heart
 
@@ -67,9 +64,5 @@ Wireframe rendering on GLES references:
 * https://www.reddit.com/r/opengl/comments/34dhi7/wireframe_shader/
 * https://tchayen.github.io/wireframes-with-barycentric-coordinates/
 * https://stackoverflow.com/questions/137629/how-do-you-render-primitives-as-wireframes-in-opengl
-
-## License
-
-Feel free to use this the way you want but just remember to list me in the credits ;)
 
 

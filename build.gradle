@@ -1,0 +1,109 @@
+buildscript {
+    repositories {
+        if( JavaVersion.current() == JavaVersion.VERSION_1_7 ) {
+            // Fallback for JDK 7 that can no longer connect to jcenter with https
+            maven { url "http://jcenter.bintray.com" }
+        } else {
+            jcenter()
+        }
+    }
+    dependencies {
+        // This sucks down a lot of stuff that 'normal' users wouldn't
+        // have and won't need anyway.
+        if( project.hasProperty('releaseUser') ) {
+            classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.+'
+        }
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+version='1.0.0'
+group='org.joliver82'
+
+ext.jmeVersion = "3.3+"
+
+// Version meta-data
+ext {
+    releaseDescription = "jme3-wireframe ${project.version}"
+    releaseVcsTag = "${project.name}-v${project.version}"
+}
+
+// Project-wide meta-data
+ext {
+    bintrayLabels = ['jMonkeyEngine', 'gamedev', 'render', 'shaders']
+    websiteUrl = 'https://github.com/joliver82/jme3-wireframe'
+    vcsUrl = 'https://github.com/joliver82/joliver82/jme3-wireframe.git'
+    githubRepo = 'joliver82/jme3-wireframe'
+    issueTrackerUrl = 'https://github.com/joliver82/jme3-wireframe/issues'
+}
+
+repositories {
+    mavenLocal()
+
+    if( JavaVersion.current() == JavaVersion.VERSION_1_7 ) {
+        // Fallback for JDK 7 that can no longer connect to jcenter with https
+        maven { url "http://jcenter.bintray.com" }
+    } else {
+        jcenter()
+    }
+}
+
+sourceCompatibility = 1.7
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+}
+
+// Make sure the build file declares what it actually imports
+configurations.compile {
+    transitive = false
+}
+
+dependencies {
+    // Pull in jme core for the math package for easy translation to/from JME
+    // classes.
+    implementation "org.jmonkeyengine:jme3-core:$jmeVersion"
+    implementation 'com.github.stephengold:Heart:6.2.0'
+
+    implementation 'org.slf4j:slf4j-api:1.7.13'
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.codehaus.groovy:groovy-all:2.4.11'
+}
+
+test {
+    testLogging {
+        // I want to see the tests that are run and pass, etc.
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+    }
+}
+
+// Configuration to produce maven-repo style -sources and -javadoc jars
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+    exclude '**/.backups'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+
+// Put this at the end or it won't pick up the project.version and stuff
+/*
+if( project.hasProperty('releaseUser') ) {
+    apply plugin: 'com.jfrog.bintray'
+    apply from: 'https://raw.githubusercontent.com/Simsilica/gradle-plugins/master/simtools-release.gradle'
+}
+*/
+

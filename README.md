@@ -22,9 +22,9 @@ Fragment shader: Paints the requested color. You can set Color and/or VertexColo
 
 ### Barycentric coordinates implementation details
 
-The mesh is expanded so you have the full list of triangles without any indexing. Then the bary coords are set as follows: v1(1,0,0), v2(0,1,0), v3(0,0,1) for each triangle. This data is stored in the normal buffer because it matches our type and size requirements and we don't need normals as we're rendering wireframe. This could cause bad behaviour with inner jme stuff like skinning (has not been tested)
+The mesh is expanded so you have the full list of triangles without any indexing. Then the bary coords are set as follows: v1(1,0,0), v2(0,1,0), v3(0,0,1) for each triangle. This data is stored in a deprecated buffer (Reserved0) that hasn't been removed from jme3 for ages, so I'm assuming it's safe enough to use it right now. Also there's a method and a material to use the normal buffer instead because we don't need normals as we're rendering wireframe although this could cause bad behaviour with inner jme stuff like skinning (has not been tested).
 
-Vertex shader: It works as usual calculating gl_Position but we're just keeping the normal as it is (AKA bary coord).
+Vertex shader: It works as usual calculating gl_Position but we're just keeping the reserved or normal as it is (AKA bary coord).
 
 Fragment shader: Calculates the minimal distance to the edge and sets alpha accordingly, if distance<0.02 sets alpha>0. It uses the requested color. You can set Color and/or VertexColor same way you would do when using jme3's Unshaded material
 

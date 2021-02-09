@@ -69,6 +69,7 @@ Desktop screenshot:
 Android screenshot:
 ![Alt text](/screenshots/wireframe-android.png?raw=true "Android screenshot")
 
+The sample app has been updated to show 6 spheres including both reserved buffer and normal buffer based
 
 ## References
 

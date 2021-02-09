@@ -6,7 +6,7 @@
 attribute vec3 inPosition;
 
 attribute vec4 inColor;
-attribute vec3 inReserved0;
+attribute vec3 inNormal;
 
 varying vec3 baryCoord;
 varying vec4 vertColor;
@@ -27,6 +27,6 @@ void main(){
         Skinning_Compute(modelSpacePos);
     #endif
 
-    baryCoord = inReserved0;
+    baryCoord = inNormal;
     gl_Position = TransformWorldViewProjection(modelSpacePos);
 }

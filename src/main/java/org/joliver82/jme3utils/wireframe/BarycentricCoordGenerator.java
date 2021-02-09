@@ -47,6 +47,52 @@ import jme3utilities.MyMesh;
 public class BarycentricCoordGenerator {
 
     /**
+     * Calculates barycentric coordinates and stores them in the Reserved0 buffer
+     * so we don't need to overwrite the normal buffer
+     *
+     * Note the Reserved0 vertexbuffer type (previously known as MiscAttrib) has been deprecated for
+     * long and could be removed. Still exists in jme 3.3.x
+     *
+     * If this method don't work fall back to normal approach
+     *
+     * The mesh needs to be in triangle mode, oherwise nothing is done
+     *
+     * @param mesh
+     */
+    public static Mesh setBarycentricCoords(Mesh mesh)
+    {
+        Mesh outMesh=mesh;
+
+        if(mesh.getMode()==Mesh.Mode.Triangles)
+        {
+            outMesh=MyMesh.expand(mesh);
+
+            FloatBuffer baryBuffer = BufferUtils.createFloatBuffer(outMesh.getVertexCount()*3);
+            outMesh.setBuffer(VertexBuffer.Type.Reserved0, 3, baryBuffer);
+
+            for (int triIndex = 0; triIndex < outMesh.getTriangleCount(); ++triIndex) {
+                //vertex1 barycoord
+                baryBuffer.put(1);
+                baryBuffer.put(0);
+                baryBuffer.put(0);
+
+                //vertex2 barycoord
+                baryBuffer.put(0);
+                baryBuffer.put(1);
+                baryBuffer.put(0);
+
+                //vertex2 barycoord
+                baryBuffer.put(0);
+                baryBuffer.put(0);
+                baryBuffer.put(1);
+            }
+            baryBuffer.flip();
+        }
+
+        return outMesh;
+    }
+
+    /**
      * Calculates barycentric coordinates and stores them in the normal buffer
      * so we don't need to mess with inner jme3 stuff
      *
@@ -54,7 +100,7 @@ public class BarycentricCoordGenerator {
      *
      * @param mesh
      */
-    public static Mesh setBarycentricCoords(Mesh mesh)
+    public static Mesh setBarycentricCoordsOverNormals(Mesh mesh)
     {
         Mesh outMesh=mesh;
 

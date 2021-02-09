@@ -71,6 +71,8 @@ Android screenshot:
 
 The sample app has been updated to show 6 spheres including both reserved buffer and normal buffer based
 
+![Alt text](/screenshots/wireframe-desktop-last.png?raw=true "New version screenshot")
+
 ## References
 
 * Designed for jMonkeyEngine 3 https://github.com/jMonkeyEngine/jmonkeyengine/

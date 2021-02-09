@@ -43,7 +43,7 @@ Not sure I'll spend more time or not into this, but...
 Include it in your project either:
 
 * Download latest release and add it as library to your jme3 project in the IDE you're using
-* If using gradle, just add implementation 'org.joliver82:jme3-wireframe:1.0.1' to your dependencies
+* If using gradle, just add jitpack.io repository and add implementation 'com.github.joliver82:jme3-wireframe:1.0.2' to your dependencies
 
 ### Geometry approach
 
